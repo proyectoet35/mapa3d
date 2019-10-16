@@ -1,0 +1,363 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, maximum-scale=1">
+
+	<title>C3D - INICIO</title>
+	<link rel="icon" href="favicon.png" type="image/png">
+	<link rel="shortcut icon" href="favicon.ico" type="img/x-icon">
+
+	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,800italic,700italic,600italic,400italic,300italic,800,700,600' rel='stylesheet' type='text/css'>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+	<link href="css/style.css" rel="stylesheet" type="text/css">
+	
+
+	<script type="text/javascript" src="js/jquery.1.8.3.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap.js"></script>
+	<script type="text/javascript" src="js/jquery-scrolltofixed.js"></script>
+	<script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
+	<script type="text/javascript" src="js/jquery.isotope.js"></script>
+	<script type="text/javascript" src="js/wow.js"></script>
+	<script type="text/javascript" src="js/classie.js"></script>
+	<script type="text/javascript" src="js/magnific-popup.js"></script>
+	<script src="contactform/contactform.js"></script>
+  
+
+<style type="text/css">
+    canvas{
+      outline: black 3px solid;
+      justify-content: center;
+      width: 800px;
+      height: 600px;
+    }
+  </style>
+
+  <style type="text/css">
+  	.dg .c input[type=text] {                                                       
+
+  line-height:normal;                                                                  
+} 
+.dg .c div {
+  box-sizing: content-box;                                                             
+}
+d3.selectAll('.hue-field').style('width','13px');	
+  </style>
+   <script src="https://threejs.org/build/three.js"></script>
+  <script type="module" src="js/Three.js"></script>
+  <script  src="js/controls/OrbitControls.js"></script>
+  <script  src="js/loaders/OBJLoader.js"></script>
+  <script  src="js/gui.js"></script>
+  <script type="module"  src="js/lights/DirectionalLight.js"></script>
+	<!-- =======================================================
+    Theme Name: Knight
+    Theme URL: https://bootstrapmade.com/knight-free-bootstrap-theme/
+    Author: BootstrapMade
+    Author URL: https://bootstrapmade.com
+	======================================================= -->
+
+</head>
+
+<body>
+		
+	<!--header-end-->
+
+	<nav class="main-nav-outer" id="test">
+		<!--main-nav-start-->
+		<div class="container">
+			<ul class="main-nav">
+<li><a href="index.html">Inicio</a></li>
+				
+		
+				<li class="small-logo"><a href="#header"><img src="img/small-logo.png" alt=""></a></li>
+		
+				<li><a href="aplicacionweb.html">Aplicacion web</a></li>
+			</ul>
+			<a class="res-nav_click" href="#"><i class="fa fa-bars"></i></a>
+		</div>
+	</nav>
+	<!--main-nav-end-->
+
+	<section >
+			<div style="display: -ms-flexbox!important; display: flex!important; -ms-flex-pack: center!important;  justify-content: center!important; margin-top: 30px; margin-bottom: 30px;">
+				<div id="escena">
+					<div id="my-gui-container" style="position: absolute;"></div>
+				</div>
+			</div>
+	</section>
+
+
+          <script>
+
+    var escena1 = document.getElementById('escena');
+    var escena = new THREE.Scene();
+    var camara = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+    var mapa = "mapa1.obj";
+    var renderer = new THREE.WebGLRenderer({ antialias: true });
+    var inicio = false;
+    renderer.setSize(1100, 750);
+    document.body.appendChild( renderer.domElement );
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setClearColor(0xffffff);
+    escena.background = new THREE.Color("rgb(252, 252, 252)");
+
+    camara.zoom = 1;
+    var opciones = 
+    {
+    	bordes: false,
+    	wireframe: false,
+    }
+    var animar = function () {
+      requestAnimationFrame( animar );
+      renderer.render(escena, camara);
+
+
+    };
+    var luz = new THREE.AmbientLight(0xffffff, 0.5);
+    var luz1 = new THREE.PointLight(0xffffff, 0.5);
+    escena.add(luz);
+    escena.add(luz1);
+  
+    var material = new THREE.MeshLambertMaterial(
+     {color: 0xFF0000, 
+      opacity: 1,
+      wireframe: true,
+      side: THREE.DoubleSide,
+      emissive:  0xF3FFE2
+    } );
+    var control = new THREE.OrbitControls(camara, renderer.domElement);
+    control.enableDamping = true;
+    control.dampingFactor = 0.25;
+    control.enableZoom = true;
+    camara.position.z = 200;
+    control.update();
+
+   function limpiar()
+      {
+         escena.remove.apply(escena, escena.children);
+         iniciar();
+      }
+
+     function iniciar()
+     {
+      
+    var loader = new THREE.OBJLoader();
+    
+    
+    
+    loader.load('mapas/' + text.Mapa + '.obj', function cargar(object) {
+    loader.setMaterials(material);
+      escena.add(object);
+      object.position.y = -70;
+    if (object instanceof THREE.Object3D)
+    {
+      object.traverse (function(mesh)
+      {
+          if (! (mesh instanceof THREE.Mesh)) return;
+      	  mesh.material = new THREE.MeshNormalMaterial();
+          mesh.material.side = THREE.DoubleSide;
+          mesh.material.wireframe = opciones.wireframe;
+          var geometry = new THREE.EdgesGeometry( mesh.geometry );
+     	  var material1 = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 11 } );
+          var edges = new THREE.LineSegments( geometry, material1 );
+          materiales(mesh,edges)
+
+    });
+}
+
+     });
+}
+	  function materiales(mesh,edges)
+	  {
+	  	setTimeout(function(){
+	  	
+         if(opciones.bordes) 
+         {
+         	mesh.add(edges);
+         }
+         else
+         {
+         	mesh.remove(edges);
+         }
+ 		 mesh.material.wireframe = opciones.wireframe;
+		 materiales(mesh,edges);
+
+
+		},10); 
+		
+	  }
+      escena1.appendChild(renderer.domElement);
+      function limpiar()
+      {
+         escena.remove.apply(escena, escena.children);
+         iniciar();
+      }
+
+  animar();
+  var gui = new dat.GUI();
+  var opc = gui.addFolder('Opciones');
+  var customContainer = document.getElementById('my-gui-container');
+  customContainer.appendChild(gui.domElement);
+  var text =
+{
+    Mapa: 'Indice de Poblacion' 
+}
+  opc.add(text, 'Mapa', ['Indice de Poblacion' , 'Densidad Poblacion' ,'PGB PBI 2010' , 'PBI 2010 per capita', 'Analfabetismo' ]).onChange( function() {
+  limpiar();
+});
+  opc.add(opciones,'wireframe').name('Mallado').listen();
+    opc.add(opciones,'bordes').name('Bordes').listen();
+  var conf = { color : '#ffae23' };    
+  opc.addColor(conf, 'color').name('Color de fondo').onChange( function(colorValue) {
+  escena.background = new THREE.Color(colorValue);
+});
+  opc.open();
+
+  
+function updateGUI (targetGui)
+{
+  for (var i in targetGui.__controllers) 
+  {
+    targetGui.__controllers[i].updateDisplay();
+  }
+}
+updateGUI(gui);
+function onWindowResize() {
+
+camara.aspect = window.innerWidth / window.innerHeight;
+camara.updateProjectionMatrix();
+renderer.setSize( window.innerWidth, window.innerHeight );
+
+}
+
+iniciar();
+
+  </script>
+ 
+			
+
+
+	<!--main-section-end-->
+
+
+
+
+
+	<footer class="footer">
+		<div class="container">
+			<div class="footer-logo"><a href="#"><img src="img/footer-logo.png" alt=""></a></div>
+			<span class="copyright">&copy; Knight Theme. All Rights Reserved</span>
+			<div class="credits">
+				<!--
+          All the links in the footer should remain intact.
+          You can delete the links only if you purchased the pro version.
+          Licensing information: https://bootstrapmade.com/license/
+          Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=Knight
+        -->
+				Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+			</div>
+		</div>
+	</footer>
+
+
+	<script type="text/javascript">
+		$(document).ready(function(e) {
+
+			$('#test').scrollToFixed();
+			$('.res-nav_click').click(function() {
+				$('.main-nav').slideToggle();
+				return false
+
+			});
+
+      $('.Portfolio-box').magnificPopup({
+        delegate: 'a',
+        type: 'image'
+      });
+
+		});
+	</script>
+
+	<script>
+		wow = new WOW({
+			animateClass: 'animated',
+			offset: 100
+		});
+		wow.init();
+	</script>
+
+
+	<script type="text/javascript">
+		$(window).load(function() {
+
+			$('.main-nav li a, .servicelink').bind('click', function(event) {
+				var $anchor = $(this);
+
+				$('html, body').stop().animate({
+					scrollTop: $($anchor.attr('href')).offset().top - 102
+				}, 1500, 'easeInOutExpo');
+				/*
+				if you don't want to use the easing effects:
+				$('html, body').stop().animate({
+					scrollTop: $($anchor.attr('href')).offset().top
+				}, 1000);
+				*/
+				if ($(window).width() < 768) {
+					$('.main-nav').hide();
+				}
+				event.preventDefault();
+			});
+		})
+	</script>
+
+	<script type="text/javascript">
+		$(window).load(function() {
+
+
+			var $container = $('.portfolioContainer'),
+				$body = $('body'),
+				colW = 375,
+				columns = null;
+
+
+			$container.isotope({
+				// disable window resizing
+				resizable: true,
+				masonry: {
+					columnWidth: colW
+				}
+			});
+
+			$(window).smartresize(function() {
+				// check if columns has changed
+				var currentColumns = Math.floor(($body.width() - 30) / colW);
+				if (currentColumns !== columns) {
+					// set new column count
+					columns = currentColumns;
+					// apply width to container manually, then trigger relayout
+					$container.width(columns * colW)
+						.isotope('reLayout');
+				}
+
+			}).smartresize(); // trigger resize to set container width
+			$('.portfolioFilter a').click(function() {
+				$('.portfolioFilter .current').removeClass('current');
+				$(this).addClass('current');
+
+				var selector = $(this).attr('data-filter');
+				$container.isotope({
+
+					filter: selector,
+				});
+				return false;
+			});
+
+		});
+	</script>
+
+</body>
+
+</html>
